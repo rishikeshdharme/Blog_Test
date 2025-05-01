@@ -5,6 +5,7 @@ import com.example.Blog_test.exception.ResourceNotFoundException;
 import com.example.Blog_test.payload.UserRequest;
 import com.example.Blog_test.payload.UserResponse;
 import com.example.Blog_test.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,25 +18,27 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     public UserResponse createUser(UserRequest userRequest){
         User user = new User();
         user.setName(userRequest.getName());
-        user.setPassword(userRequest.getPasssword());
+        user.setPassword(userRequest.getPassword());
         user.setEmail(userRequest.getEmail());
-        user.setAbout(userRequest.getDecription());
+        user.setAbout(userRequest.getAbout());
         userRepository.save(user);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setPasssword(user.getPassword());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setDecription(user.getAbout());
-
+//        UserResponse userResponse = new UserResponse();
+//        userResponse.setId(user.getId());
+//        userResponse.setName(user.getName());
+//        userResponse.setPasssword(user.getPassword());
+//        userResponse.setEmail(user.getEmail());
+//        userResponse.setDecription(user.getAbout());
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
         return userResponse;
     }
 
@@ -43,16 +46,17 @@ public class UserService {
 
         User user = userRepository.findById(id).orElseThrow(() ->  new ResourceNotFoundException("User","Id",id));
         user.setName(userRequest.getName());
-        user.setPassword(userRequest.getPasssword());
+        user.setPassword(userRequest.getPassword());
         user.setEmail(userRequest.getEmail());
-        user.setAbout(userRequest.getDecription());
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setPasssword(user.getPassword());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setDecription(user.getAbout());
-        userRepository.save(user);
+        user.setAbout(userRequest.getAbout());
+//        userRepository.save(user);
+//        UserResponse userResponse = new UserResponse();
+//        userResponse.setId(user.getId());
+//        userResponse.setName(user.getName());
+//        userResponse.setPasssword(user.getPassword());
+//        userResponse.setEmail(user.getEmail());
+//        userResponse.setDecription(user.getAbout());
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
         return userResponse;
     }
 
@@ -64,15 +68,14 @@ public class UserService {
     public UserResponse findById(int id){
 
            User user= userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("User","Id",id));
-           UserResponse userResponse = new UserResponse();
+//           UserResponse userResponse = new UserResponse();
+//               userResponse.setId(user.getId());
+//               userResponse.setName(user.getName());
+//               userResponse.setEmail(user.getEmail());
+//               userResponse.setPasssword(user.getPassword());
+//               userResponse.setDecription(user.getAbout());
 
-
-               userResponse.setId(user.getId());
-               userResponse.setName(user.getName());
-               userResponse.setEmail(user.getEmail());
-               userResponse.setPasssword(user.getPassword());
-               userResponse.setDecription(user.getAbout());
-
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
 
 
         return userResponse;
@@ -87,12 +90,14 @@ public class UserService {
     }
 
     public UserResponse convertUsertoUserResponse(User user){
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setPasssword(user.getPassword());
-        userResponse.setDecription(user.getAbout());
+        //use modelMapper to convert one model to another model ---
+        UserResponse userResponse = modelMapper.map(user,UserResponse.class);
+
+//        userResponse.setId(user.getId());
+//        userResponse.setName(user.getName());
+//        userResponse.setEmail(user.getEmail());
+//        userResponse.setPasssword(user.getPassword());
+//        userResponse.setDecription(user.getAbout());
         return  userResponse;
     }
 }

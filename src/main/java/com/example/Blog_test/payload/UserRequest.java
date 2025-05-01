@@ -11,16 +11,10 @@ public class UserRequest {
     private int id;
     private String name;
     private String email;
-    private String passsword;
-    private String decription;
+    private String password;
+    private String about;
 
-    public String getDecription() {
-        return decription;
-    }
 
-    public void setDecription(String decription) {
-        this.decription = decription;
-    }
 
     public String getEmail() {
         return email;
@@ -46,11 +40,19 @@ public class UserRequest {
         this.name = name;
     }
 
-    public String getPasssword() {
-        return passsword;
+    public String getAbout() {
+        return about;
     }
 
-    public void setPasssword(String passsword) {
-        this.passsword = passsword;
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
