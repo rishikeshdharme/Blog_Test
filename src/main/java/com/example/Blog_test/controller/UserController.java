@@ -4,6 +4,7 @@ import com.example.Blog_test.payload.ApiResponse;
 import com.example.Blog_test.payload.UserRequest;
 import com.example.Blog_test.payload.UserResponse;
 import com.example.Blog_test.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +23,14 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest){
 
             UserResponse createduser = userService.createUser(userRequest);
             return  new ResponseEntity<>(createduser, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest,@PathVariable("userId") Integer uid){
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserRequest userRequest,@PathVariable("userId") Integer uid){
        UserResponse userResponse = userService.updateUser(userRequest,uid);
        return  ResponseEntity.ok(userResponse);
     }

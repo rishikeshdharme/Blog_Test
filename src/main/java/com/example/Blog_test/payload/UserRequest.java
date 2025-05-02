@@ -1,5 +1,9 @@
 package com.example.Blog_test.payload;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,9 +13,15 @@ import lombok.Setter;
 public class UserRequest {
 
     private int id;
+    @NotEmpty
+    @Size(min = 2,message = "Username must be minimun of 2 character !!")
     private String name;
+    @Email
     private String email;
+    @NotNull
+    @Size(min = 8 , message = "Password must be greater than 8 Characters !!")
     private String password;
+    @NotEmpty
     private String about;
 
 
