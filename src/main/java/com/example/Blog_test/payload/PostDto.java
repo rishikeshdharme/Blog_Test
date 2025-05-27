@@ -1,11 +1,14 @@
 package com.example.Blog_test.payload;
 
 import com.example.Blog_test.entity.Category;
+import com.example.Blog_test.entity.Comment;
 import com.example.Blog_test.entity.User;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PostDto {
 
@@ -16,8 +19,9 @@ public class PostDto {
     private String content;
     private Date postDate;
     private String imageName;
-    private Category category;
-    private User user;
+    private CategoryDto category;
+    private UserResponse user;
+    private Set<CommentDto> comment = new HashSet<>();
 
     public Integer getPostId() {
         return postId;
@@ -43,13 +47,7 @@ public class PostDto {
         this.tittle = tittle;
     }
 
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 
     public String getImageName() {
         return imageName;
@@ -67,11 +65,27 @@ public class PostDto {
         this.postDate = postDate;
     }
 
-    public User getUser() {
+    public CategoryDto getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDto category) {
+        this.category = category;
+    }
+
+    public UserResponse getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponse user) {
         this.user = user;
+    }
+
+    public Set<CommentDto> getComment() {
+        return comment;
+    }
+
+    public void setComment(Set<CommentDto> comment) {
+        this.comment = comment;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.Blog_test.exception;
 
+import com.example.Blog_test.payload.ApiExpection;
 import com.example.Blog_test.payload.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -33,5 +34,12 @@ public class GlobalException {
                     errors.put(fieldname,defaultMessage);
                 });
         return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ApiExpection.class)
+    public ResponseEntity<ApiExpection> wrongCredentialsExceptionHandler(MetaDataAccessException ex) {
+        String message = ex.getMessage();
+        ApiExpection apiExpection = new ApiExpection(message);
+        return new ResponseEntity<>(apiExpection, HttpStatus.BAD_REQUEST);
     }
 }

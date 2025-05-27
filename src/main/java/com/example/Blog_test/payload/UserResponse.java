@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class UserResponse {
     private int id;
@@ -12,8 +15,15 @@ public class UserResponse {
     private String email;
     private String password;
     private String about;
+    private Set<RoleResponse> roles = new HashSet<>();
 
+    public Set<RoleResponse> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<RoleResponse> roles) {
+        this.roles = roles;
+    }
 
     public String getEmail() {
         return email;

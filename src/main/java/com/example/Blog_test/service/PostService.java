@@ -1,6 +1,7 @@
 package com.example.Blog_test.service;
 
 import com.example.Blog_test.entity.Category;
+import com.example.Blog_test.entity.Comment;
 import com.example.Blog_test.entity.Post;
 import com.example.Blog_test.entity.User;
 import com.example.Blog_test.exception.ResourceNotFoundException;
@@ -13,11 +14,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PostService {
@@ -66,12 +69,27 @@ public class PostService {
     public PostDto getPostById(Integer pid){
      Post post =   postRepository.findById(pid).orElseThrow(()-> new ResourceNotFoundException("post","post id",pid));
     PostDto postDto =  modelMapper.map(post,PostDto.class);
+
+    postDto.getComment().forEach(c ->{
+                Comment comment = post.getCommentSet().stream().filter(cm ->cm.getCid().equals(c.getCid())).findFirst().orElse(null);
+                if(comment!=null){
+                    c.setUsername(comment.getUser().getName());
+                }
+            }
+            );
     return postDto;
     }
 
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize){
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize,String sortBy,String sortDirection){
         //Add Pagination ---
-        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Sort sort = null;
+        if(sortDirection.equalsIgnoreCase("asc")){
+           sort = Sort.by(sortBy).ascending();
+        }
+        else{
+           sort = Sort.by(sortBy).descending();
+        }
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);
         Page<Post> pagingAll = postRepository.findAll(pageable);
         List<Post> posts = pagingAll.getContent();
 
@@ -120,5 +138,11 @@ public class PostService {
         postResponse.setLastPage(posts.isLast());
 
         return postResponse;
+    }
+
+    public List<PostDto> searchPostsByKeyword(String keyword){
+        List<Post> posts = postRepository.searchPostByKeyword("%"+keyword+"%");
+        List<PostDto> postDtos = posts.stream().map((post) -> modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
 }
