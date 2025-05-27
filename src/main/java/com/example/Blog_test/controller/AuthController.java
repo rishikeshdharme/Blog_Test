@@ -4,6 +4,8 @@ import com.example.Blog_test.Security.CustomUserDetailsService;
 import com.example.Blog_test.payload.*;
 import com.example.Blog_test.service.JWTService;
 import com.example.Blog_test.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Endpoints for user authentication like login and registration")
 public class AuthController {
 
     private final CustomUserDetailsService userService;
@@ -33,6 +36,7 @@ public class AuthController {
         this.userService1 = userService1;
     }
 
+    @Operation(summary = "User Login", description = "Authenticate user and generate JWT token")
     @PostMapping("/login")
     public ResponseEntity<AuthReponse> createToken(@RequestBody AuthRequest authRequest) {
 
@@ -54,6 +58,7 @@ public class AuthController {
 
     }
 
+    @Operation(summary = "User Registration", description = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<UserResponse> registerUser(@RequestBody UserRequest userRequest) {
         UserResponse userResponse = userService1.registerUser(userRequest);
